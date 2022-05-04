@@ -2,11 +2,13 @@ var golfinho, golfinhoNadando;
 var areia;
 var areia2;
 var areia3; 
-
+var peixescommedo;
+var peixescommedo2;
 
 function preload(){
 golfinhoNadando = loadAnimation("trex1.png","trex3.png","trex4.png");
 areia2= loadImage("ground2.png");
+peixescommedo2= loadImage("cloud.png")
 }
 
 function setup(){
@@ -25,7 +27,7 @@ console.log(aleatoria);
 }
 
 function draw(){
-background("lightgrey");
+background("black");
 //console.log (golfinho.y);
 if(keyDown("space")&& golfinho.y >= 150){
 golfinho.velocityY = -9;
@@ -41,5 +43,13 @@ drawSprites();
 }
 
 function peixes(){
-
+if(frameCount % 120 === 0 ){
+peixescommedo = createSprite(600,100,40,10);
+peixescommedo.velocityX = -3;
+peixescommedo.addImage(peixescommedo2);
+peixescommedo.y = Math.round (random(0,120));
+peixescommedo.lifetime = 220;
+peixescommedo.depth = golfinho.depth;
+golfinho.depth += 1;
+}
 }
