@@ -45,39 +45,40 @@ console.log(aleatoria);
 migalhas = 0;
 nemo = new Group();
 carnivoros = new Group();
+golfinho.debug = false;
+golfinho.setCollider("circle",0,0,50);
 }
 
 function draw(){
 background("AliceBlue");
-//console.log (golfinho.y);
+console.log (golfinho.y);
+golfinho.collide(areia3);
+drawSprites();
+fill("Black");
+stroke("AliceBlue");
+textSize(24);
+text("score:"+ migalhas, 270,50);   
 if(estado === nadando){
 areia.velocityX = -2;
-
-
-}
-else if(estado === afogamento){
-areia.velocityX = 0;
-
-
-}
-
 if(keyDown("space")&& golfinho.y >= 150){
 golfinho.velocityY = -13;
 }
 golfinho.velocityY += 1; 
-golfinho.collide(areia3);
-
 if(areia.x<0){
 areia.x=areia.width/2;
 }
 peixes();
 tubaroes();
-drawSprites();
 migalhas += Math.round(frameCount/60);
-fill("Black");
-stroke("AliceBlue");
-textSize(24);
-text("score:"+ migalhas, 270,50);      
+if(carnivoros.isTouching(golfinho)){
+estado = afogamento;
+}
+}
+else if(estado === afogamento){
+areia.velocityX = 0;
+nemo.setVelocityXEach(0);
+carnivoros.setVelocityXEach(0);
+} 
 }
 
 function peixes(){
