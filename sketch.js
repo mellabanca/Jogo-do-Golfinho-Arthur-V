@@ -16,6 +16,11 @@ var carnivoros;
 var nadando = 1;
 var afogamento = 0;
 var estado = nadando;
+var afogado;
+var marcontaminado;
+var marcontaminadoImage;
+var patrick;
+var patrickImage;
 
 function preload(){
 golfinhoNadando = loadAnimation("trex1.png","trex3.png","trex4.png");
@@ -27,6 +32,9 @@ tub3 = loadImage("obstacle3.png");
 tub4 = loadImage("obstacle4.png");
 tub5 = loadImage("obstacle5.png");
 tub6 = loadImage("obstacle6.png");
+afogado = loadAnimation("trex_collided.png");
+patrickImage = loadImage("restart.png");
+marcontaminadoImage = loadImage("gameOver.png");
 }
 
 function setup(){
@@ -38,6 +46,7 @@ areia3 = createSprite(0,190,400,10);
 areia3.visible = false;
 golfinho = createSprite(50, 160, 20, 50);
 golfinho.addAnimation("nadando", golfinhoNadando);
+golfinho.addAnimation("afogamento", afogado);
 golfinho.scale = 0.5;
 bordas = createEdgeSprites();
 var aleatoria = Math.round(random(1,100));
@@ -47,11 +56,16 @@ nemo = new Group();
 carnivoros = new Group();
 golfinho.debug = false;
 golfinho.setCollider("circle",0,0,50);
+patrick = createSprite(300,140);
+patrick.addImage ("patrickImage", patrickImage);
+marcontaminado = createSprite(300,100);
+marcontaminado.addImage("marcontaminadoImage", marcontaminadoImage);
+patrick.scale= 0.49;
 }
 
 function draw(){
 background("AliceBlue");
-console.log (golfinho.y);
+//console.log (golfinho.y);
 golfinho.collide(areia3);
 drawSprites();
 fill("Black");
@@ -59,6 +73,8 @@ stroke("AliceBlue");
 textSize(24);
 text("score:"+ migalhas, 270,50);   
 if(estado === nadando){
+marcontaminado.visible = false;
+patrick.visible = false;
 areia.velocityX = -2;
 if(keyDown("space")&& golfinho.y >= 150){
 golfinho.velocityY = -13;
@@ -75,9 +91,15 @@ estado = afogamento;
 }
 }
 else if(estado === afogamento){
+golfinho.changeAnimation ("afogamento");
+nemo.setLifetimeEach(-45827674632);
+carnivoros.setLifetimeEach(-28394621742873);
+golfinho.velocityY = 0;
 areia.velocityX = 0;
 nemo.setVelocityXEach(0);
 carnivoros.setVelocityXEach(0);
+marcontaminado.visible = true;
+patrick.visible = true;
 } 
 }
 
