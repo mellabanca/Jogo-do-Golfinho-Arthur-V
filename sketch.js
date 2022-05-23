@@ -45,13 +45,13 @@ soprateirritar = loadSound("checkPoint.mp3");
 }
 
 function setup(){
-createCanvas(600,200);
-areia = createSprite (200,180,600,20);
+createCanvas(windowWidth, windowHeight);
+areia = createSprite (width/2,height-80,width,125);
 areia.addImage(areia2);
 areia.x= areia.width/2;
-areia3 = createSprite(0,190,400,10);
+areia3 = createSprite(width/2,height-10,width,125);
 areia3.visible = false;
-golfinho = createSprite(50, 160, 20, 50);
+golfinho = createSprite(50, height-70, 20, 50);
 golfinho.addAnimation("nadando", golfinhoNadando);
 golfinho.addAnimation("afogamento", afogado);
 golfinho.scale = 0.5;
@@ -63,9 +63,9 @@ nemo = new Group();
 carnivoros = new Group();
 golfinho.debug = false;
 golfinho.setCollider("circle",0,0,50);
-patrick = createSprite(300,140);
+patrick = createSprite(width/2, height/2);
 patrick.addImage ("patrickImage", patrickImage);
-marcontaminado = createSprite(300,100);
+marcontaminado = createSprite(width/2, height/2-50);
 marcontaminado.addImage("marcontaminadoImage", marcontaminadoImage);
 patrick.scale= 0.49;
 }
@@ -84,9 +84,10 @@ if(estado === nadando){
 marcontaminado.visible = false;
 patrick.visible = false;
 areia.velocityX = -(4+migalhas/100);
-if(keyDown("space")&& golfinho.y >= 150){
+if(keyDown("space")&& golfinho.y >= height-130 || touches.length > 0 && golfinho.y >= height-130){
 golfinho.velocityY = -13;
 mortal.play();
+touches = [];
 }
 golfinho.velocityY += 1; 
 if(areia.x<0){
@@ -94,7 +95,7 @@ areia.x=areia.width/2;
 }
 peixes();
 tubaroes();
-migalhas += Math.round(frameCount/60);
+migalhas += Math.round(frameRate()/60);
 if(migalhas > 0 && migalhas % 100 === 0){
 soprateirritar.play();
 }
@@ -113,22 +114,29 @@ nemo.setVelocityXEach(0);
 carnivoros.setVelocityXEach(0);
 marcontaminado.visible = true;
 patrick.visible = true;
+if(mousePressedOver(patrick) || touches.length>0){
+touches = [];
+barbaNegra();
+}
 } 
-
-if(mousePressedOver(patrick)){
-    barbaNegra();
-}
 }
 
-function barbaNegra();
+function barbaNegra(){
+estado = nadando;
+nemo.destroyEach ();
+carnivoros.destroyEach ();
+golfinho.changeAnimation("nadando");
+migalhas = 0;
+
+}
 
 function peixes(){
 if(frameCount % 120 === 0 ){
-peixescommedo = createSprite(600,100,40,10);
+peixescommedo = createSprite(width+20,height-300,40,10);
 peixescommedo.velocityX = -3;
 peixescommedo.addImage(peixescommedo2);
-peixescommedo.y = Math.round (random(0,120));
-peixescommedo.lifetime = 220;
+peixescommedo.y = Math.round (random(0,height/2-100));
+peixescommedo.lifetime = 490;
 peixescommedo.depth = golfinho.depth;
 golfinho.depth += 1;
 nemo.add(peixescommedo);
@@ -137,7 +145,7 @@ nemo.add(peixescommedo);
 
 function tubaroes(){
 if(frameCount % 60 === 0) {
-var tubaroes1 = createSprite(600,165,10,40);
+var tubaroes1 = createSprite(width,height-95,10,40);
 tubaroes1.velocityX = -(6+migalhas/100);
 var pensamentosdechuveiro = Math.round (random(1,6));
 switch(pensamentosdechuveiro){
